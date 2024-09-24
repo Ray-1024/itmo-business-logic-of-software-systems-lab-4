@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1gp1mbh" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.27.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.21.0">
+  <bpmn:process id="Process_jinwedcm" name="Доставка заказа" isExecutable="true" camunda:historyTimeToLive="30">
+    <bpmn:startEvent id="StartEvent_1sjkhdnrfb" name="Начало доставки заказа" camunda:initiator="initiator">
+      <bpmn:extensionElements />
+      <bpmn:outgoing>Flow_1i51019</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:endEvent id="Event_1nkljnsdv" name="Конец доставки заказа">
+      <bpmn:incoming>Flow_0mci8io</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:userTask id="Activity_1qr7mmf" name="Форма просмотра назначенного заказа" camunda:formKey="embedded:app:forms/courier_assign_order.form" camunda:candidateGroups="couriers">
+      <bpmn:incoming>Flow_1i51019</bpmn:incoming>
+      <bpmn:outgoing>Flow_19i6b0x</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="Activity_16tu05l" name="Назначение заказу статуса &#34;Доставляется&#34;" camunda:delegateExpression="#{orderSetStatusDelivering}">
+      <bpmn:incoming>Flow_19i6b0x</bpmn:incoming>
+      <bpmn:outgoing>Flow_1dtx8q4</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="Activity_16zkirs" name="Форма подтверждения доставки" camunda:formKey="embedded:app:forms/courier_complete_order.form" camunda:candidateGroups="couriers">
+      <bpmn:incoming>Flow_1dtx8q4</bpmn:incoming>
+      <bpmn:outgoing>Flow_1egq17p</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="Activity_1f7qe3c" name="Назначение заказу статуса &#34;Доставлен&#34;" camunda:delegateExpression="#{orderSetStatusDelivered}">
+      <bpmn:incoming>Flow_1egq17p</bpmn:incoming>
+      <bpmn:outgoing>Flow_0mci8io</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1i51019" sourceRef="StartEvent_1sjkhdnrfb" targetRef="Activity_1qr7mmf" />
+    <bpmn:sequenceFlow id="Flow_19i6b0x" sourceRef="Activity_1qr7mmf" targetRef="Activity_16tu05l" />
+    <bpmn:sequenceFlow id="Flow_1dtx8q4" sourceRef="Activity_16tu05l" targetRef="Activity_16zkirs" />
+    <bpmn:sequenceFlow id="Flow_1egq17p" sourceRef="Activity_16zkirs" targetRef="Activity_1f7qe3c" />
+    <bpmn:sequenceFlow id="Flow_0mci8io" sourceRef="Activity_1f7qe3c" targetRef="Event_1nkljnsdv" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_jinwedcm">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1sjkhdnrfb">
+        <dc:Bounds x="182" y="99" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="157" y="142" width="88" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1n0mznu_di" bpmnElement="Event_1nkljnsdv">
+        <dc:Bounds x="842" y="99" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="820" y="62" width="81" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1qr7mmf_di" bpmnElement="Activity_1qr7mmf">
+        <dc:Bounds x="270" y="77" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_16tu05l_di" bpmnElement="Activity_16tu05l">
+        <dc:Bounds x="420" y="77" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_16zkirs_di" bpmnElement="Activity_16zkirs">
+        <dc:Bounds x="550" y="77" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1f7qe3c_di" bpmnElement="Activity_1f7qe3c">
+        <dc:Bounds x="690" y="77" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1i51019_di" bpmnElement="Flow_1i51019">
+        <di:waypoint x="218" y="117" />
+        <di:waypoint x="270" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_19i6b0x_di" bpmnElement="Flow_19i6b0x">
+        <di:waypoint x="370" y="117" />
+        <di:waypoint x="420" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1dtx8q4_di" bpmnElement="Flow_1dtx8q4">
+        <di:waypoint x="520" y="117" />
+        <di:waypoint x="550" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1egq17p_di" bpmnElement="Flow_1egq17p">
+        <di:waypoint x="650" y="117" />
+        <di:waypoint x="690" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0mci8io_di" bpmnElement="Flow_0mci8io">
+        <di:waypoint x="790" y="117" />
+        <di:waypoint x="842" y="117" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1gp1mbh" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.27.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.21.0">
+  <bpmn:process id="Process_1t6i7xm" name="Создание заказа" isExecutable="true" camunda:historyTimeToLive="30">
+    <bpmn:startEvent id="StartEvent_1" name="Начало создания заказа" camunda:initiator="initiator">
+      <bpmn:extensionElements />
+      <bpmn:outgoing>Flow_14eg5zy</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:userTask id="Activity_013cjig" name="Заполнение формы для добавления предмета" camunda:formKey="embedded:app:forms/client_order_add_item.form" camunda:candidateGroups="clients">
+      <bpmn:extensionElements />
+      <bpmn:incoming>Flow_0ael8wj</bpmn:incoming>
+      <bpmn:incoming>Flow_104tbnv</bpmn:incoming>
+      <bpmn:outgoing>Flow_051xx2m</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_14eg5zy" sourceRef="StartEvent_1" targetRef="Activity_0rxvqcs" />
+    <bpmn:exclusiveGateway id="Gateway_1yma534" name="Завершить создание заказа?" default="Flow_0ael8wj">
+      <bpmn:incoming>Flow_1ifzv50</bpmn:incoming>
+      <bpmn:outgoing>Flow_1we38w6</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0ael8wj</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_1ifzv50" sourceRef="Activity_19k4zuj" targetRef="Gateway_1yma534" />
+    <bpmn:endEvent id="Event_1n0mznu" name="Конец создания заказа">
+      <bpmn:incoming>Flow_1we38w6</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1we38w6" name="Да&#10;" sourceRef="Gateway_1yma534" targetRef="Event_1n0mznu">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{isOrderComplete}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0ael8wj" name="Нет" sourceRef="Gateway_1yma534" targetRef="Activity_013cjig" />
+    <bpmn:serviceTask id="Activity_0rxvqcs" name="Создание пустого заказа" camunda:delegateExpression="#{orderCreateListener}">
+      <bpmn:incoming>Flow_14eg5zy</bpmn:incoming>
+      <bpmn:outgoing>Flow_104tbnv</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_104tbnv" sourceRef="Activity_0rxvqcs" targetRef="Activity_013cjig" />
+    <bpmn:serviceTask id="Activity_19k4zuj" name="Добавление предмета в заказ" camunda:delegateExpression="#{orderAddItemListener}">
+      <bpmn:incoming>Flow_051xx2m</bpmn:incoming>
+      <bpmn:outgoing>Flow_1ifzv50</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_051xx2m" sourceRef="Activity_013cjig" targetRef="Activity_19k4zuj" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1t6i7xm">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="182" y="99" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="156" y="142" width="89" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_013cjig_di" bpmnElement="Activity_013cjig">
+        <dc:Bounds x="410" y="77" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1yma534_di" bpmnElement="Gateway_1yma534" isMarkerVisible="true">
+        <dc:Bounds x="705" y="195" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="701" y="255" width="58" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1n0mznu_di" bpmnElement="Event_1n0mznu">
+        <dc:Bounds x="852" y="172" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="829" y="134.5" width="82" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0rxvqcs_di" bpmnElement="Activity_0rxvqcs">
+        <dc:Bounds x="260" y="77" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_19k4zuj_di" bpmnElement="Activity_19k4zuj">
+        <dc:Bounds x="680" y="77" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_14eg5zy_di" bpmnElement="Flow_14eg5zy">
+        <di:waypoint x="218" y="117" />
+        <di:waypoint x="260" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ifzv50_di" bpmnElement="Flow_1ifzv50">
+        <di:waypoint x="730" y="157" />
+        <di:waypoint x="730" y="195" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1we38w6_di" bpmnElement="Flow_1we38w6">
+        <di:waypoint x="755" y="220" />
+        <di:waypoint x="804" y="220" />
+        <di:waypoint x="804" y="190" />
+        <di:waypoint x="852" y="190" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="759" y="202" width="14" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ael8wj_di" bpmnElement="Flow_0ael8wj">
+        <di:waypoint x="705" y="220" />
+        <di:waypoint x="608" y="220" />
+        <di:waypoint x="608" y="150" />
+        <di:waypoint x="509" y="150" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="632" y="198" width="20" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_104tbnv_di" bpmnElement="Flow_104tbnv">
+        <di:waypoint x="360" y="117" />
+        <di:waypoint x="410" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_051xx2m_di" bpmnElement="Flow_051xx2m">
+        <di:waypoint x="510" y="117" />
+        <di:waypoint x="680" y="117" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

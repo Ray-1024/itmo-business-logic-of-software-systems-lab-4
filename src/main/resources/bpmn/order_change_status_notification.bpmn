@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="sid-38422fae-e03e-43a3-bef4-bd33b32041b2" targetNamespace="http://bpmn.io/bpmn" exporter="Camunda Modeler" exporterVersion="5.27.0">
+  <process id="Process_1" name="Процесс отправки уведомлений об изменении статуса заказа" isExecutable="true" camunda:historyTimeToLive="30">
+    <startEvent id="Event_order_status_changed" name="Каждые 5 секунд">
+      <outgoing>Flow_01wy121</outgoing>
+      <timerEventDefinition id="TimerEventDefinition_1ovik7d">
+        <timeCycle xsi:type="tFormalExpression">R/PT5S</timeCycle>
+      </timerEventDefinition>
+    </startEvent>
+    <endEvent id="Event_14yoph3" name="Просмотр и отправка всех уведомлений о смене статуса заказа">
+      <incoming>Flow_01wy121</incoming>
+      <messageEventDefinition id="MessageEventDefinition_1049rqf" camunda:delegateExpression="#{orderStatusChangedNotificator}">
+        <extensionElements />
+      </messageEventDefinition>
+    </endEvent>
+    <sequenceFlow id="Flow_01wy121" sourceRef="Event_order_status_changed" targetRef="Event_14yoph3" />
+  </process>
+  <bpmndi:BPMNDiagram id="BpmnDiagram_1">
+    <bpmndi:BPMNPlane id="BpmnPlane_1" bpmnElement="Process_1">
+      <bpmndi:BPMNShape id="Event_1yidfvr_di" bpmnElement="Event_order_status_changed">
+        <omgdc:Bounds x="182" y="122" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="156" y="165" width="88" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_14yoph3_di" bpmnElement="Event_14yoph3">
+        <omgdc:Bounds x="412" y="122" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="392" y="165" width="77" height="66" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_01wy121_di" bpmnElement="Flow_01wy121">
+        <omgdi:waypoint x="218" y="140" />
+        <omgdi:waypoint x="412" y="140" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

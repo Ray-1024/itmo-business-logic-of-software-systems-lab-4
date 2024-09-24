@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1gp1mbh" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.27.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.21.0">
+  <bpmn:process id="Process_iusndfrv" name="Упаковка заказа" isExecutable="true" camunda:historyTimeToLive="30">
+    <bpmn:startEvent id="StartEvent_ijhnwrsfvc" name="Начало упаковки заказа" camunda:initiator="initiator">
+      <bpmn:extensionElements />
+      <bpmn:outgoing>Flow_0920xdw</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:endEvent id="Event_krfjnvpld" name="Конец упаковки заказа">
+      <bpmn:incoming>Flow_08jgr65</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="Activity_0vk194d" name="Смена статуса заказа на &#34;Упаковывается&#34;" camunda:delegateExpression="#{orderSetStatusPacking}">
+      <bpmn:incoming>Flow_1kbry0a</bpmn:incoming>
+      <bpmn:outgoing>Flow_0wi42s8</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="Activity_10z9jbm" name="Форма просмотра назначенного заказа" camunda:formKey="embedded:app:forms/packer_assign_order.form" camunda:candidateGroups="packers">
+      <bpmn:incoming>Flow_0920xdw</bpmn:incoming>
+      <bpmn:outgoing>Flow_1kbry0a</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_0920xdw" sourceRef="StartEvent_ijhnwrsfvc" targetRef="Activity_10z9jbm" />
+    <bpmn:sequenceFlow id="Flow_1kbry0a" sourceRef="Activity_10z9jbm" targetRef="Activity_0vk194d" />
+    <bpmn:userTask id="Activity_1qw0me4" name="Форма подтверждение того что заказ упакован и готов" camunda:formKey="embedded:app:forms/packer_complete_order.form" camunda:candidateGroups="packers">
+      <bpmn:incoming>Flow_0wi42s8</bpmn:incoming>
+      <bpmn:outgoing>Flow_1oxmih3</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_0wi42s8" sourceRef="Activity_0vk194d" targetRef="Activity_1qw0me4" />
+    <bpmn:serviceTask id="Activity_1izeoz7" name="Смена статуса заказа на &#34;Упакован&#34;" camunda:delegateExpression="#{orderSetStatusPacked}">
+      <bpmn:incoming>Flow_1oxmih3</bpmn:incoming>
+      <bpmn:outgoing>Flow_08jgr65</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1oxmih3" sourceRef="Activity_1qw0me4" targetRef="Activity_1izeoz7" />
+    <bpmn:sequenceFlow id="Flow_08jgr65" sourceRef="Activity_1izeoz7" targetRef="Event_krfjnvpld" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_iusndfrv">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_ijhnwrsfvc">
+        <dc:Bounds x="182" y="99" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="157" y="142" width="88" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0vk194d_di" bpmnElement="Activity_0vk194d">
+        <dc:Bounds x="410" y="77" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_10z9jbm_di" bpmnElement="Activity_10z9jbm">
+        <dc:Bounds x="260" y="77" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1qw0me4_di" bpmnElement="Activity_1qw0me4">
+        <dc:Bounds x="550" y="77" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1izeoz7_di" bpmnElement="Activity_1izeoz7">
+        <dc:Bounds x="690" y="77" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1n0mznu_di" bpmnElement="Event_krfjnvpld">
+        <dc:Bounds x="882" y="99" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="860" y="62" width="80" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0920xdw_di" bpmnElement="Flow_0920xdw">
+        <di:waypoint x="218" y="117" />
+        <di:waypoint x="260" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1kbry0a_di" bpmnElement="Flow_1kbry0a">
+        <di:waypoint x="360" y="117" />
+        <di:waypoint x="410" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0wi42s8_di" bpmnElement="Flow_0wi42s8">
+        <di:waypoint x="510" y="117" />
+        <di:waypoint x="550" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1oxmih3_di" bpmnElement="Flow_1oxmih3">
+        <di:waypoint x="650" y="117" />
+        <di:waypoint x="690" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08jgr65_di" bpmnElement="Flow_08jgr65">
+        <di:waypoint x="790" y="117" />
+        <di:waypoint x="882" y="117" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

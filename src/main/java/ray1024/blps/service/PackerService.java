@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ray1024.blps.model.entity.Order;
 import ray1024.blps.model.entity.User;
 import ray1024.blps.repository.OrderRepository;
+import ray1024.blps.repository.UserRepository;
 
 import java.time.Instant;
 
@@ -14,11 +15,16 @@ import java.time.Instant;
 @AllArgsConstructor
 public class PackerService {
 
+    private final UserRepository userRepository;
     private OrderRepository orderRepository;
     private NotificationService notificationService;
 
     @Transactional
-    public Order findNewOrder(@NonNull User user) {
+    public Order findNewOrder(@NonNull String username) {
+        if (userRepository.findByUsername(username).isEmpty()) {
+            userRepository.save(User.builder().username(username).password(username).build());
+        }
+        User user = userRepository.findByUsername(username).orElseThrow();
         if (orderRepository.findByPacker(user).isPresent())
             throw new IllegalStateException("Already have order in packing");
         Order order = orderRepository.findFirstByPackerIsNull().orElseThrow();
@@ -29,7 +35,11 @@ public class PackerService {
     }
 
     @Transactional
-    public Order doneOrder(@NonNull User user) {
+    public Order doneOrder(@NonNull String username) {
+        if (userRepository.findByUsername(username).isEmpty()) {
+            userRepository.save(User.builder().username(username).password(username).build());
+        }
+        User user = userRepository.findByUsername(username).orElseThrow();
         if (orderRepository.findByPacker(user).isEmpty())
             throw new IllegalStateException("No orders to done");
         Order order = orderRepository.findByPacker(user).orElseThrow();
