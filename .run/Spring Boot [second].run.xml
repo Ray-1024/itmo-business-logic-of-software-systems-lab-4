@@ -1,0 +1,14 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Spring Boot [second]" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <option name="ACTIVE_PROFILES" value="second" />
+    <option name="ALTERNATIVE_JRE_PATH" value="17" />
+    <module name="src" />
+    <projectPathOnTarget name="projectPathOnTarget" value="$USER_HOME$/studs/s335135/src" />
+    <target name="@@@LOCAL@@@" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="ray1024.blps.SrcApplication" />
+    <option name="VM_PARAMETERS" value="-Xmx1024m" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
